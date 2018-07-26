@@ -1,0 +1,6 @@
+"Global Database Name" for your database: full name of your database, this helps you in uniquely identifying your database.
+this should be in the form of "Database_Name.domain name" , for this instance i will use "youtube_oracle.mohitsharmaonline.com"
+
+SID: stands for "System Identifier", system has assined "outubeorac" as default SID and i had kept it as it is.
+
+Oracle Enterprise Manager is a web based management tool for individual database.
