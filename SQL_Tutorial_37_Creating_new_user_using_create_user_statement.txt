@@ -1,0 +1,20 @@
+Syntax for create user:
+
+CREATE USER username IDENTIFIED BY password/externally/globally
+
+DEFAULT TABLESPACE tablespace	TEMPORARY TABLESPACE tablespace
+
+QUOTA size/unlimited ON tablespace_name
+
+PROFILE pofile_name
+
+PASSWORD expire
+
+ACCOUNT lock/unlock
+
+****************************************************************************
+
+"IDENTIFIED BY" -- Helps oracle in identifying the user. Three ways user can be identified:
+1) Password: lets you create a local user and that user must specify a password to connect to database.
+2) Externally: lets you create an external user, external users are identified by external services like your operating system.
+3) Globaly: lets you create a global user. lets you create the
