@@ -16,5 +16,104 @@ ACCOUNT lock/unlock
 
 "IDENTIFIED BY" -- Helps oracle in identifying the user. Three ways user can be identified:
 1) Password: lets you create a local user and that user must specify a password to connect to database.
-2) Externally: lets you create an external user, external users are identified by external services like your operating system.
-3) Globaly: lets you create a global user. lets you create the
+2) Externally: lets you create an external user, external users are identified by external services like
+ your operating system.
+3) Globaly: lets you create a global user. global users are allowed to keep the authentication information
+ in the central Oracle Security Server, instead of having password in each database to be accessed.
+
+DEAFULT TABLESPACE: name of the tablespace where this user will create its object. Object here means
+ tables, indexes, synonyms etc. etc. this is optional, if you leave this clause all the objects will go to 
+ database's default tablespace. which is users tablespace in most cases.
+
+TEMPORARY TABLESPACE: all the temporary objects created by users goes in this tablespace. Temporary segment
+ such as temporary tables. you have to specify name of temporary tablespace here similar to the default tablespace. 
+ make sure that table space you are going to specify here must be temporary tablespace. optional, if not
+ specified temporary objects go to default temporary tablespace.
+
+QUOTA: allows you to specify maximum amount of space user is capable of allocating to the tablespace. in a single
+ create user statement you can have multiple quota clause. Quota clause is followed by size, you can either specify
+ a limited size such as 50M or 100M , M : Megabyte, or just write 'UNLIMITED' to specify space without any bounds.
+ after the size you have to specify the name of the tablespace using the ON clause. 
+ name is optional but is highly recommended.
+
+PROFILE: with this clause you can specify the profile you want to assign to the user. 
+By assigning profile you can limit the amount of database resources the user can use. 
+it is optional, if left database will assign a default profile to the user.
+
+PASSWORD EXPIRE: forces the user to change the password on first login attempt. optional.
+
+ACCOUNT lock/unlock: sets the status of your user account.
+
+******************************************************************************************* 
+
+CREATE USER ironman IDENTIFIED BY jarvis
+DEFAULT TABLESPACE users TEMPORARY TABLESPACE temp
+QUOTA 20M ON users
+ACCOUNT unlock;
+
+******************************************************************************************
+
+User IRONMAN created.
+
+*******************************************************************************************
+
+users and temp are two default tablespaces which are created by Oracle at the time of database
+crwation, there are total 6 default tablespaces created by oracle on the time of databse creation.
+
+*******************************************************************************************
+
+SELECT usr.username, usr.account_status, usr.default_tablespace,
+usr.temporary_tablespace, usr.profile, usr.authentication_type FROM DBA_USERS usr WHERE usr.username = 'IRONMAN';
+
+*********************************************************************************************
+
+a newly created user cannot connect to the database until granted the CREATE SESSION system priviledge.
+
+**********************************************************************************************
+
+
+C:\Users\mohit>sqlplus ironman/jarvi
+
+SQL*Plus: Release 11.2.0.1.0 Production on Sat Jul 28 13:50:01 2018
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+ERROR:
+ORA-01017: invalid username/password; logon denied
+
+user 'IRONMAN' doesn't have the CREATE session priviledge, hence logon is denied.
+
+**********************************************************************************************
+
+to grant permission logoin with Sys user priviledge
+
+C:\Users\mohit>sqlplus / as sysdba
+
+SQL*Plus: Release 11.2.0.1.0 Production on Sat Jul 28 13:57:18 2018
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+**************************************************************************************************
+
+
+SQL> show user
+USER is "SYS"
+SQL> GRANT create session TO ironman;
+
+Grant succeeded.
+
+************************************************************************************************
+
+SQL> conn ironman/jarvis
+Connected.
+
+SQL> SHOW user
+USER is "IRONMAN"
+
+************************************************************************************************
+
